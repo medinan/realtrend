@@ -1,0 +1,15 @@
+{% for product in products %}
+    <tr id="col_prod_{{ product.pk }}" data-pk="{{ product.pk }}" data-code="{{ product.code }}"
+        data-name="{{ product.name }}" data-quantity="{{ product.quantity }}"
+        data-create="{{ product.create }}">
+        <td id="td_code_{{ product.pk }}">{{ product.code }}</td>
+        <td id="td_name_{{ product.pk }}">{{ product.name }}</td>
+        <td id="td_quantity_{{ product.pk }}">{{ product.quantity }}</td>
+        <td id="td_create_{{ product.pk }}">{{ product.create }}</td>
+        <td id="td_buttons_{{ product.pk }}"><button data-pk="{{ product.pk }}" class="button-edit" id="btn_edit_{{ product.pk }}" type="button">edit</button>
+            <button data-pk="{{ product.pk }}" class="button-save" id="btn_save_{{ product.pk }}" type="button" style="display: none">save</button>
+            <button data-pk="{{ product.pk }}" class="button-cancel" id="btn_cancel_{{ product.pk }}" type="button" style="display: none">cancel</button>
+        </td>
+    </tr>
+{% endfor %}
+{% include 'catalog_extend.html' %}
