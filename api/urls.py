@@ -16,6 +16,7 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib import admin
 from api import views as api_views
+from products import views as prod_views
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
@@ -23,5 +24,6 @@ urlpatterns = [
     url(r'^autorizacion/$', api_views.AutorizacionTemplateView.as_view(), name='autorizacion'),
     url(r'^login/$', api_views.LoginRedirectView.as_view(), name='login'),
     url(r'^home/$', api_views.HomeTemplateView.as_view(), name='home'),
+    url(r'^products/create/$', prod_views.PublicacionCreateView.as_view(), name='publications_new'),
 
 ]

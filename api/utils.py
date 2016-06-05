@@ -44,6 +44,10 @@ class AuthMercadoLibreMixin(object):
             return Meli(client_id=settings.MERCADO_LIBRE_APP_ID, client_secret=settings.MERCADO_LIBRE_APP_SECRET_KEY)
 
     @property
+    def user_info(self):
+        return self.request.session.get(settings.MERCADO_LIBRE_APP_USER_INFO)
+
+    @property
     def url_login(self):
         site = Site.objects.get_current()
         _re = 'http://' + site.domain + reverse('autorizacion')
@@ -57,6 +61,8 @@ class AuthMercadoLibreMixin(object):
 
     def get_context_data(self, **kwargs):
         data = super(AuthMercadoLibreMixin, self).get_context_data(**kwargs)
+        data['user'] = self.user_info
+        data['is_auth'] = self.is_auth()
         return data
 
 
