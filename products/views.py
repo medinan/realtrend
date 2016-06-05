@@ -13,11 +13,11 @@ from django.http import JsonResponse
 # Create your views here.
 
 
-class IngresoTemplateView(generic.TemplateView):
-    template_name = 'index.html'
-
-    def get_context_data(self, **kwargs):
-        data = super(IngresoTemplateView, self).get_context_data(**kwargs)
+# class IngresoTemplateView(generic.TemplateView):
+#     template_name = 'index.html'
+#
+#     def get_context_data(self, **kwargs):
+#         data = super(IngresoTemplateView, self).get_context_data(**kwargs)
 
 
 # class CatalogFormView(AjaxMixin, generic.FormView):

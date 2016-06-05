@@ -15,10 +15,11 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
-from products import views as prod_views
+from api import views as api_views
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^$', prod_views.IngresoTemplateView.as_view(), name='ingreso'),
+    url(r'^$', api_views.IngresoTemplateView.as_view(), name='ingreso'),
+    url(r'^/autorizacion/$', api_views.AutorizacionTemplateView.as_view(), name='autorizacion'),
 
 ]
