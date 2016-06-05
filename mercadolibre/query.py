@@ -25,6 +25,12 @@ class Sites(object):
         path = '/sites/%s/categories' % settings.MERCADO_LIBRE_APP_SITES['id']
         _result = _handler.get(path, params)
         return json.loads(_result.content)
+    @staticmethod
+    def get_sub_category(_handler, categoria):
+        path = '/categories/%s' % categoria
+        _result = _handler.get(path)
+        return json.loads(_result.content)
+
 
 
 

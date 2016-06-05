@@ -24,6 +24,6 @@ urlpatterns = [
     url(r'^autorizacion/$', api_views.AutorizacionTemplateView.as_view(), name='autorizacion'),
     url(r'^login/$', api_views.LoginRedirectView.as_view(), name='login'),
     url(r'^home/$', api_views.HomeTemplateView.as_view(), name='home'),
-    url(r'^products/create/$', prod_views.PublicacionCreateView.as_view(), name='publications_new'),
+    url(r'^products/create/$', prod_views.PublicacionSelectCategoryView.as_view(), name='publications_category_select'),
 
 ]

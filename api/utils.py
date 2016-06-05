@@ -1,6 +1,7 @@
 # --encoding:utf-8
 
 from mercadolibre.lib.meli import Meli
+from mercadolibre import query
 from django.conf import settings
 from functools import wraps
 from django.core.urlresolvers import reverse
@@ -64,6 +65,25 @@ class AuthMercadoLibreMixin(object):
         data['user'] = self.user_info
         data['is_auth'] = self.is_auth()
         return data
+
+
+class CategoryMixin(AuthMercadoLibreMixin):
+    def get_current_category(self):
+        return self.request.GET.get('category')
+
+    @property
+    def is_category_root(self):
+        if self.get_current_category():
+            return False
+        else:
+            return True
+
+    def get_list_category(self):
+        if not self.request.GET.get('category'):
+            _cat = query.Sites.get_root_category(_handler=self.mercadolibre, params={})
+        else:
+            _cat = query.Sites.get_sub_category(_handler=self.mercadolibre, categoria=self.request.GET['category'])
+        return _cat
 
 
 def login_required(url_login):

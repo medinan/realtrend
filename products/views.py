@@ -10,26 +10,22 @@ from api.utils import AjaxMixin
 from django.db.models import Q
 from django.template.loader import render_to_string
 from django.http import JsonResponse
-from api.utils import AuthMercadoLibreMixin
+from api.utils import AuthMercadoLibreMixin, CategoryMixin
 from mercadolibre import query
 from products import forms as frm_products
 # Create your views here.
 
 
-class PublicacionCreateView(AuthMercadoLibreMixin, generic.FormView):
+class PublicacionSelectCategoryView(CategoryMixin, generic.FormView):
     template_name = 'publications_create.html'
     form_class = frm_products.PublicationsCreate
 
-    def get_category(self):
-        if not self.request.GET.get('category'):
-            _cat = query.Sites.get_root_category(_handler=self.mercadolibre, params={})
-        else:
-            _cat = {}
-        return _cat
-
     def get_context_data(self, **kwargs):
-        data = super(PublicacionCreateView, self).get_context_data(**kwargs)
-        data['categorys'] = self.get_category()
+        data = super(PublicacionSelectCategoryView, self).get_context_data(**kwargs)
+        data['categorys'] = self.get_list_category()
+        data['root_category'] = self.is_category_root
+        data['is_leaf'] = False if self.is_category_root or \
+                                   data['categorys'].get('children_categories')!=[] else True
         return data
 
 
