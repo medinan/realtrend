@@ -38,6 +38,7 @@ INSTALLED_APPS = (
 	'django.contrib.sessions',
 	'django.contrib.messages',
 	'django.contrib.staticfiles',
+	'django.contrib.sites',
 	'products',
 )
 
@@ -102,9 +103,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [
-	os.path.join(BASE_DIR, "static"),
-]
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "static"), ]
 
+SITE_ID = 1
 MERCADO_LIBRE_APP_ID = '3829333078126342'
 MERCADO_LIBRE_APP_SECRET_KEY = 'IuBcWBOcVARKo5VopTmEaxHOOLtSPNYC'
+MERCADO_LIBRE_APP_ACCESS_TOKEN = 'access_token'
+MERCADO_LIBRE_APP_REFRESH_TOKEN = 'refresh_token'

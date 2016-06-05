@@ -3,7 +3,9 @@
 
 import re
 import os
+import time
 import requests
+from requests.exceptions import ConnectionError
 from urllib import urlencode
 from ConfigParser import SafeConfigParser
 import json
@@ -34,8 +36,11 @@ class Meli(object):
         params = { 'grant_type' : 'authorization_code', 'client_id' : self.client_id, 'client_secret' : self.client_secret, 'code' : code, 'redirect_uri' : redirect_URI}
         headers = {'Accept': 'application/json', 'User-Agent':self.SDK_VERSION, 'Content-type':'application/json'}
         uri = self.make_path(self.OAUTH_URL)
-
-        response = requests.post(uri, params=urlencode(params), headers=headers)
+        try:
+            response = requests.post(uri, params=urlencode(params), headers=headers)
+        except ConnectionError:
+            time.sleep(1)
+            response = requests.post(uri, params=urlencode(params), headers=headers)
 
         if response.status_code == requests.codes.ok:
             response_info = response.json()
@@ -45,7 +50,7 @@ class Meli(object):
             else:
                 self.refresh_token = '' # offline_access not set up
 
-            return self.access_token
+            return self.access_token, self.refresh_token
         else:
             # response code isn't a 200; raise an exception
             response.raise_for_status()

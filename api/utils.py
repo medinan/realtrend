@@ -4,14 +4,7 @@ from mercadolibre.lib.meli import Meli
 from django.conf import settings
 from functools import wraps
 from django.core.urlresolvers import reverse
-
-handler_app = Meli(client_id=settings.MERCADO_LIBRE_APP_ID,
-                   client_secret=settings.MERCADO_LIBRE_APP_SECRET_KEY)
-
-
-# class AuthDataSetting():
-
-
+from django.contrib.sites.models import Site
 
 
 class AjaxMixin(object):
@@ -22,25 +15,45 @@ class AjaxMixin(object):
 
 
 class AuthMercadoLibreMixin(object):
+    """
+    Clase Mixin multiproposito para administracion de autentizacion y autorizacion.
+
+    """
     @classmethod
     def as_view(cls, **kwargs):
         return super(AuthMercadoLibreMixin, cls).as_view(**kwargs)
 
     def is_auth(self):
-        if self.request.session.get('auth_token'):
+        if self.request.session.get(settings.MERCADO_LIBRE_APP_ACCESS_TOKEN):
             return True
         else:
             return False
 
+    def get_access_token(self):
+        return self.request.session[settings.MERCADO_LIBRE_APP_ACCESS_TOKEN]
+
+    def get_refresh_token(self):
+        return self.request.session[settings.MERCADO_LIBRE_APP_REFRESH_TOKEN]
+
+    @property
+    def mercadolibre(self):
+        if self.is_auth():
+            return Meli(client_id=settings.MERCADO_LIBRE_APP_ID, client_secret=settings.MERCADO_LIBRE_APP_SECRET_KEY,
+                        access_token=self.get_access_token(), refresh_token=self.get_refresh_token())
+        else:
+            return Meli(client_id=settings.MERCADO_LIBRE_APP_ID, client_secret=settings.MERCADO_LIBRE_APP_SECRET_KEY)
+
     @property
     def url_login(self):
-        _re = 'http://localhost:8000' + reverse('autorizacion')
-        url = handler_app.auth_url(redirect_URI=_re)
+        site = Site.objects.get_current()
+        _re = 'http://' + site.domain + reverse('autorizacion')
+        url = self.mercadolibre.auth_url(redirect_URI=_re)
         return url
 
     @property
     def url_redirect(self):
-        return 'http://localhost:8000' + reverse('ingreso')
+        site = Site.objects.get_current()
+        return site.domain + reverse('ingreso')
 
     def get_context_data(self, **kwargs):
         data = super(AuthMercadoLibreMixin, self).get_context_data(**kwargs)

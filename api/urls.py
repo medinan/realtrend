@@ -19,7 +19,9 @@ from api import views as api_views
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^$', api_views.IngresoTemplateView.as_view(), name='ingreso'),
-    url(r'^/autorizacion/$', api_views.AutorizacionTemplateView.as_view(), name='autorizacion'),
+    url(r'^$', api_views.IndexTemplateView.as_view(), name='ingreso'),
+    url(r'^autorizacion/$', api_views.AutorizacionTemplateView.as_view(), name='autorizacion'),
+    url(r'^login/$', api_views.LoginRedirectView.as_view(), name='login'),
+    url(r'^home/$', api_views.HomeTemplateView.as_view(), name='home'),
 
 ]
