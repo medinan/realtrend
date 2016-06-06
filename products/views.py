@@ -60,12 +60,14 @@ class PublicationCreateView(CategoryMixin, generic.FormView):
             messages.success(self.request, 'La publicacion se genero exitosa!!!')
             return redirect(reverse('publications_list'))
         else:
+            messages.error(self.request, "%s %s" % (_result['message'], _result['error']))
             for causes in _result['cause']:
                 messages.error(self.request, "%s, %s" % (causes['code'], causes['message']))
             return super(PublicationCreateView, self).form_invalid(form=form)
 
     def get_context_data(self, **kwargs):
         data = super(PublicationCreateView, self).get_context_data(**kwargs)
+        data['category'] = query.Sites.get_sub_category(self.mercadolibre, self.get_current_category())
         return data
 
 

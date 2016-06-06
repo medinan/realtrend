@@ -16,6 +16,7 @@ from django.http import JsonResponse
 
 
 class LoginRedirectView(AuthMercadoLibreMixin, generic.RedirectView):
+    access_public = True
 
     def get_redirect_url(self, *args, **kwargs):
         if self.request.session.get(settings.MERCADO_LIBRE_APP_ACCESS_TOKEN):
@@ -25,7 +26,14 @@ class LoginRedirectView(AuthMercadoLibreMixin, generic.RedirectView):
 
 
 class IndexTemplateView(AuthMercadoLibreMixin, generic.TemplateView):
+    access_public = True
     template_name = 'index.html'
+
+    def get(self, request, *args, **kwargs):
+        if self.is_auth():
+            return redirect(reverse('home'))
+        else:
+            return super(IndexTemplateView, self).get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         data = super(IndexTemplateView, self).get_context_data(**kwargs)
@@ -34,6 +42,7 @@ class IndexTemplateView(AuthMercadoLibreMixin, generic.TemplateView):
 
 
 class AutorizacionTemplateView(AuthMercadoLibreMixin, generic.TemplateView):
+    access_public = True
     template_name = 'index.html'
 
     def get(self, request, *args, **kwargs):
@@ -48,9 +57,7 @@ class AutorizacionTemplateView(AuthMercadoLibreMixin, generic.TemplateView):
 
     def get_context_data(self, **kwargs):
         data = super(AutorizacionTemplateView, self).get_context_data(**kwargs)
-        data['url_login'] = self.url_login
         return data
-
 
 
 class HomeTemplateView(AuthMercadoLibreMixin, generic.TemplateView):
@@ -59,3 +66,12 @@ class HomeTemplateView(AuthMercadoLibreMixin, generic.TemplateView):
     def get_context_data(self, **kwargs):
         data = super(HomeTemplateView, self).get_context_data(**kwargs)
         return data
+
+
+class LogoutRedirectView(AuthMercadoLibreMixin, generic.RedirectView):
+    access_public = True
+
+    def get_redirect_url(self, *args, **kwargs):
+        self.request.session.clear()
+        return reverse('ingreso')
+

@@ -23,6 +23,7 @@ urlpatterns = [
     url(r'^$', api_views.IndexTemplateView.as_view(), name='ingreso'),
     url(r'^autorizacion/$', api_views.AutorizacionTemplateView.as_view(), name='autorizacion'),
     url(r'^login/$', api_views.LoginRedirectView.as_view(), name='login'),
+    url(r'^logout/$', api_views.LogoutRedirectView.as_view(), name='logout'),
     url(r'^home/$', api_views.HomeTemplateView.as_view(), name='home'),
     url(r'^products/(?P<category>[\w_-]+)/new/$', prod_views.PublicationCreateView.as_view(), name='publications_create'),
     url(r'^products/create/$', prod_views.PublicationSelectCategoryView.as_view(), name='publications_category_select'),

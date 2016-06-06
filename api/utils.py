@@ -4,9 +4,23 @@ from mercadolibre.lib.meli import Meli
 from mercadolibre import query
 from django.conf import settings
 from functools import wraps
+from django.shortcuts import redirect
 from django.core.urlresolvers import reverse
 from django.contrib.sites.models import Site
 
+
+def login_required(url_login):
+    def _login_required(view_func):
+        @wraps(view_func)
+        def __login_required(view, *args, **kwargs):
+
+            if not view.is_auth() and not view.access_public:
+                return redirect(url_login)
+
+            return view_func(view, *args, **kwargs)
+
+        return __login_required
+    return _login_required
 
 class AjaxMixin(object):
     def dispatch(self, request, *args, **kwargs):
@@ -20,6 +34,7 @@ class AuthMercadoLibreMixin(object):
     Clase Mixin multiproposito para administracion de autentizacion y autorizacion.
 
     """
+    access_public = False
     @classmethod
     def as_view(cls, **kwargs):
         return super(AuthMercadoLibreMixin, cls).as_view(**kwargs)
@@ -60,6 +75,10 @@ class AuthMercadoLibreMixin(object):
         site = Site.objects.get_current()
         return site.domain + reverse('ingreso')
 
+    @login_required('/')
+    def dispatch(self, request, *args, **kwargs):
+        return super(AuthMercadoLibreMixin, self).dispatch(request, *args, **kwargs)
+
     def get_context_data(self, **kwargs):
         data = super(AuthMercadoLibreMixin, self).get_context_data(**kwargs)
         data['user'] = self.user_info
@@ -86,25 +105,7 @@ class CategoryMixin(AuthMercadoLibreMixin):
         return _cat
 
 
-def login_required(url_login):
-    """Metodo decorador check_roles verifica que el usuario tenga los roles necesarios
-    para acceder a la vista. En caso de que no posea los permisos retorna PermissionDenied object.
 
-    """
-    def _login_required(view_func):
-        @wraps(view_func)
-        def __login_required(view, *args, **kwargs):
-
-            for rol in view.roles_required:
-                if rol in my_roles:
-                    pass
-                else:
-                    raise PermissionDenied
-
-            return view_func(view, *args, **kwargs)
-
-        return __login_required
-    return _login_required
 
 
 from django import forms
