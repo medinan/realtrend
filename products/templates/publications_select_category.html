@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load staticfiles %}
+
+{% block content %}
+    <div class="grid padding50">
+        <div class="row">
+            <div class="colspan12">
+                <legend style="font-size: 1.5rem; line-height: 1;color: #2d3277" class="text-shadow  text-light">Nueva publicacion.</legend>
+                <hr class="thin">
+
+            </div>
+
+            {% if not root_category %}
+                <div class="colspan12">
+                    <ul class="breadcrumbs2 small">
+                        {% for path in categorys.path_from_root %}
+                            <li><a href="{% url 'publications_category_select' %}{% if not forloop.first %}?category={{ path.id }}{% endif %}">{{ path.name }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+
+                {% if root_category %}
+                    {% for cat in categorys %}
+                        <div class="colspan12 align-center">
+                            <a style="font-size: 1.0rem; line-height: 1;color: #2d3277" class="text-shadow  text-light" href="{% url 'publications_category_select' %}?category={{ cat.id }}">{{ cat.name }}</a>
+                        </div>
+                    {% endfor %}
+                {% else %}
+
+                    {% if is_leaf %}
+
+                        <div class="colspan12">
+
+                            <h1 style="font-size: 1.0rem; line-height: 1;color: #2d3277" class="text-shadow metro-title text-light">
+                                {% for path in categorys.path_from_root %}{{ path.name }}{% if not forloop.last %}>>{% endif %}{% endfor %}
+                            </h1>
+                            <div class="colspan12 align-center">
+                                <a  href="{% url 'publications_create' category=current_category %}" class="command-button icon-right text-shadow metro-title text-light" style="background: #2d3277; color: white">
+                                    <span style="color: white;" class="icon mif-checkmark"></span>
+                                    Listo, categoria selecionada.
+                                    <small style="color: white">continue generando la publicacion.</small>
+                                </a>
+                            </div>
+                        </div>
+
+                    {% else %}
+                        {% for cat in categorys.children_categories %}
+                            <div class="colspan12 align-center">
+                                <a style="font-size: 1.0rem; line-height: 1;color: #2d3277" class="text-shadow  text-light" href="{% url 'publications_category_select' %}?category={{ cat.id }}">{{ cat.name }}</a>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endif %}
+
+
+        </div>
+
+    </div>
+
+
+{% endblock %}

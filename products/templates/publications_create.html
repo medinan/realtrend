@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load staticfiles %}
+{% load metro %}
+{% block content %}
+    <div class="grid padding50">
+        <div class="row">
+            <div class="cell">
+                <legend style="font-size: 1.5rem; line-height: 1;color: #2d3277" class="text-shadow  text-light">Nueva publicacion.</legend>
+                <hr class="thin">
+
+            </div>
+
+                <div class="cell">
+                    <ul class="breadcrumbs2 small">
+                        {% for path in category.path_from_root %}
+                            <li><a href="{% url 'publications_category_select' %}{% if not forloop.first %}?category={{ path.id }}{% endif %}">{{ path.name }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+            <div class="cell">
+                <form method="post">
+
+                        <div class="cell">
+                            {% csrf_token %}
+                            {{ form|metrorender }}
+                        </div>
+                        <div class="cell align-right">
+                            <button class="button large" style="background: #2d3277; color: white;width: 250px; height: 50px" type="submit">Crear</button>
+                        </div>
+
+
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+
+
+
+
+{% endblock %}
