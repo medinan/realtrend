@@ -10,6 +10,7 @@
     <link href="{% static 'css/metro.css' %}" rel="stylesheet">
     <link href="{% static 'css/metro-icons.css' %}" rel="stylesheet">
     <link href="{% static 'css/metro-responsive.css' %} "rel="stylesheet">
+    <link href="{% static 'css/docs.css' %} "rel="stylesheet">
 
     <script src="{% static 'js/jquery-2.1.3.min.js' %}"></script>
     <script src="{% static 'js/metro.js' %}"></script>
@@ -27,7 +28,8 @@
                     <li>
                         <a href="#" class="dropdown-toggle">Mis productos</a>
                         <ul class="d-menu" data-role="dropdown" data-no-close="true">
-                            <li><a href="{% url 'publications_category_select' %}">Mis publicaciones</a></li>
+                            <li><a href="{% url 'publications_list' %}">Mis publicaciones</a></li>
+                            <li><a href="{% url 'publications_category_select' %}">Nueva publicacion</a></li>
                         </ul>
                     </li>
 
@@ -61,6 +63,6 @@
     </div>
 
 
-
+{% include 'messages.html' %}
 </body>
 </html>

@@ -1,0 +1,32 @@
+{% if messages %}
+    <script>
+        $(document).ready(function() {
+            {% for message in messages %}
+                {% if message.tags == 'success' %}
+                    $.Notify({
+                                    caption: 'success',
+                                    content: '{{ message }}',
+                                    type: 'success',
+                                    keepOpen: true
+                                });
+                {% else %}
+                    {% if message.tags == 'error' %}
+                        $.Notify({
+                                    caption: 'error',
+                                    content: '{{ message }}',
+                                    type: 'alert',
+                                    keepOpen: true
+                                });
+                    {% else %}
+                        $.Notify({
+                                    caption: 'error',
+                                    content: '{{ message }}',
+                                    type: 'info',
+                                    keepOpen: true
+                                });
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        });
+    </script>
+{% endif %}

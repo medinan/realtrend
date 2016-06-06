@@ -1,0 +1,29 @@
+{% load metro %}
+
+
+
+        <div class="row">
+            {% if field|is_check_or_radio_fields %}
+
+                <div class="cell">
+
+                        <div class="{{ field|addcss:field.errors }}">
+                            {{ field }}
+                            <span class="check"></span>
+                            <span class="caption">{{ field.label }}</span>
+                        </div>
+                </div>
+            {% else %}
+                <div class="cell">
+                    <label class="block align-left" style="color: #2d3277">{{ field.label }}</label>
+                    <div class="{{ field|addcss:field.errors }}">
+
+                        {{ field }}
+                    </div>
+                </div>
+            {% endif %}
+
+
+        </div>
+
+

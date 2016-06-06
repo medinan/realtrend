@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load staticfiles %}
+{% load metro %}
+{% block content %}
+    <div class="grid padding50">
+        <div class="row">
+            <div class="cell">
+                <legend style="font-size: 1.5rem; line-height: 1;color: #2d3277" class="text-shadow  text-light">Mis Publicaciones.</legend>
+                <hr class="thin">
+
+            </div>
+            <div class="cell align-left">
+                <div class="listview-outlook" data-role="listview">
+                    {% for product in object_list  %}
+                        <a class="list marked" href="#">
+                                <div class="list-content">
+                                    <span class="list-title">{% for path in product.category.path_from_root %}
+                                        {{ path.name|escape }}
+                                    {% endfor %}</span>
+                                    <span class="list-title">{{ product.title }}</span>
+                                    <span class="list-subtitle">{{ product.subtitle|default:'No ingresado' }}</span>
+                                    <span class="list-subtitle">precio: {{ product.price }} {{ product.currency_id }}
+                                     cantidad: {{ product.available_quantity }}</span>
+                                    <span class="list-remark">Hello friend! Newest for Metro UI CSS</span>
+                                </div>
+                        </a>
+                    {% endfor %}
+
+
+                        </div>
+            </div>
+
+        </div>
+    </div>
+
+
+
+
+
+{% endblock %}

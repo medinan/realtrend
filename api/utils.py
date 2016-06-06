@@ -106,3 +106,58 @@ def login_required(url_login):
         return __login_required
     return _login_required
 
+
+from django import forms
+
+
+class FormExtraFieldType(object):
+    @staticmethod
+    def create_field_list_type(**kwargs):
+        """
+        :param kwargs: values, label
+        :return: forms.ChoiceField
+        """
+        values = [(v['id'], v['name']) for v in kwargs['values']]
+        return forms.ChoiceField(choices=values, required=True, label=kwargs['name'])
+
+    @staticmethod
+    def create_field_string(**kwargs):
+        """
+        :param kwargs: label, value_max_length
+        :return:
+        """
+        return forms.CharField(max_length=kwargs['value_max_length'], label=kwargs['name'], required=True)
+
+    @staticmethod
+    def create_field_boolean(**kwargs):
+        """
+        :param kwargs: label
+        :return:
+        """
+        return forms.BooleanField(required=True)
+
+    @staticmethod
+    def create_field_integer(**kwargs):
+        """
+        :param kwargs: label, value_max_length
+        :return:
+        """
+        _max = '9' * int(kwargs['value_max_length'])
+        return forms.IntegerField(max_value=int(_max), required=True)
+
+
+ML_EXTRA_FIELD = {'list': FormExtraFieldType.create_field_list_type,
+                  'string': FormExtraFieldType.create_field_string,
+                  'boolean': FormExtraFieldType.create_field_boolean,
+                  'number': FormExtraFieldType.create_field_integer}
+
+
+class FieldRenderMixin(object):
+    TEXT_INPUT = 'input-control text full-size'
+    DATE_PICKER_INPUT = 'fdatepicker input-text full-size'
+    SELECT_INPUT = 'input-control select full-size'
+    CHECK_INPUT = 'input-control checkbox'
+    RADIO_INPUT = 'input-control radio'
+    TEXT_AREA = 'input-control textarea full-size'
+
+
